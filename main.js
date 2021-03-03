@@ -3,7 +3,7 @@
 const ul = document.getElementById("list");
 const div = document.getElementById("loading");
  // 3秒後にresolveされた結果を表示する関数定義
-const resolveAfter3Seconds = () => {
+const resolveAfter3Seconds= () => {
   // Promiseオブジェクトを返す
   return new Promise((resolve) => {
     // タイマーをセットする
@@ -28,6 +28,7 @@ const resolveAfter3Seconds = () => {
 
 // 非同期関数を定義
 async function asyncCall() {
+try {
   // 3秒後にresolveされた結果を表示する関数定義を定数valuesに格納
   const values = await resolveAfter3Seconds();
   // 定数valuesに格納された配列に対して処理を実行する
@@ -48,8 +49,10 @@ async function asyncCall() {
         li.appendChild(a);
         a.appendChild(img);
       });
+    } catch(error) {
+      console.log('error');
+    } finally {
       loading.style.display = "none";
-  }
+    }
+}
     asyncCall();
-
-  
