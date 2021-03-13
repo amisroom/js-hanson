@@ -3,7 +3,7 @@
 const ul = document.getElementById("list");
 const div = document.getElementById("loading");
  // 3秒後にresolveされた結果を表示する関数定義
-const resolveAfter3Seconds = () => {
+const resolveAfter3Seconds= () => {
   // Promiseオブジェクトを返す
   return new Promise((resolve) => {
     // タイマーをセットする
@@ -28,14 +28,25 @@ const resolveAfter3Seconds = () => {
 
 // 非同期関数を定義
 async function asyncCall() {
+try {
   // 3秒後にresolveされた結果を表示する関数定義を定数valuesに格納
   const values = await resolveAfter3Seconds();
-  // 定数valuesに格納された配列に対して処理を実行する
-      values.forEach((e) => {
+  createElements(values);
+} catch(error) {
+  console.log('error');
+} finally {
+  loading.style.display = "none";
+}
+}
+    asyncCall();
+
+// DOMを作る関数
+    function createElements(items) {
+      for (const e of items) {
         const a = document.createElement("a");
         const img = document.createElement("img");
         const li = document.createElement("li");
-
+  
         a.href = e.to;
         // imgタグのsrc属性にimgプロパティを代入
         img.src = e.img;
@@ -43,13 +54,9 @@ async function asyncCall() {
         img.alt = e.alt;
         // liが持つtextContentプロパティに文字列をセット
         a.textContent = e.text;
-
+  
         ul.appendChild(li);
         li.appendChild(a);
         a.appendChild(img);
-      });
-      loading.style.display = "none";
+      }
   }
-    asyncCall();
-
-  
