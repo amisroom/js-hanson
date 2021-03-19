@@ -43,6 +43,9 @@ function createElements(items) {
 function clickButton() {
   loading.style.display = 'inline';
   btn.style.display = 'none';
+  setTimeout(() => {
+   asyncCall();
+}, 3000);
 }
 
 // ボタンをクリックした時にイベントを発生させる
