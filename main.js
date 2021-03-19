@@ -1,58 +1,54 @@
 'use strict';
 
-const ul = document.getElementById("list");
-const div = document.getElementById("loading");
- // 3秒後にresolveされた結果を表示する関数定義
-const resolveAfter3Seconds= () => {
-  // Promiseオブジェクトを返す
-  return new Promise((resolve) => {
-    // タイマーをセットする
-    setTimeout(() => {
-      resolve([
-        {
-          to: "bookmark.html",
-          img: "img/1.png",
-          alt: "画像1",
-          text: "ブックマーク"
-        },
-        {
-          to: "message.html",
-          img: "img/2.png",
-          alt: "画像2",
-          text: "メッセージ"
-        }
-      ]);
-    }, 3000);
-  });
-}
+const ul = document.getElementById('list');
+const div = document.getElementById('loading');
+const btn = document.getElementById('btn');
+
+loading.style.display = 'none';
 
 // 非同期関数を定義
 async function asyncCall() {
 try {
-  // 3秒後にresolveされた結果を表示する関数定義を定数valuesに格納
-  const values = await resolveAfter3Seconds();
-  // 定数valuesに格納された配列に対して処理を実行する
-      values.forEach((e) => {
-        const a = document.createElement("a");
-        const img = document.createElement("img");
-        const li = document.createElement("li");
+  // JSONを読み込む
+  const response = await fetch('https://jsondata.okiba.me/v1/json/FtQ63210306142524')
+  const json = await response.json();
+  createElements(json.data);
+} catch(error) {
+  console.log('error');
+} finally {
+  loading.style.display = 'none';
+}
+}
 
+setTimeout(() => {
+  asyncCall();
+}, 3000);
+
+// DOMを作る関数
+    function createElements(items) {
+      for (const e of items) {
+        const a = document.createElement('a');
+        const img = document.createElement('img');
+        const li = document.createElement('li');
+  
         a.href = e.to;
-        // imgタグのsrc属性にimgプロパティを代入
         img.src = e.img;
-        // imgタグのalt属性にaltプロパティを代入
         img.alt = e.alt;
-        // liが持つtextContentプロパティに文字列をセット
         a.textContent = e.text;
-
+  
         ul.appendChild(li);
         li.appendChild(a);
         a.appendChild(img);
-      });
-    } catch(error) {
-      console.log('error');
-    } finally {
-      loading.style.display = "none";
-    }
-}
-    asyncCall();
+      }
+  }
+
+  // ボタンをクリックした時にローディング画像を表示しボタンを消す関数
+  function clickButton() {
+    loading.style.display = 'inline';
+    btn.style.display = 'none';
+  }
+
+  // ボタンをクリックした時にイベントを発生させる
+  btn.addEventListener('click', () => {
+    clickButton();
+  });
